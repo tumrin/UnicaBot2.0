@@ -1,2 +1,2 @@
 # UnicaBot2.0
-New version of unica bot for updated unica website
+New version of UnicaBot for updated unica website.
