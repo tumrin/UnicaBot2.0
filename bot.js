@@ -43,7 +43,6 @@ client.on("message", (message) => {
 });
 
 try {
-  console.log("Päivitä");
   paivitaRuoat();
 } catch (error) {
   console.error(error);
@@ -71,7 +70,6 @@ function paivitaRuoat() {
           });
         break;
       case "macciavelli":
-        console.log("maccis päivitetty");
         url = "https://www.unica.fi/modules/json/json/Index?costNumber=1970&language=fi";
         fetch(url, settings)
           .then(res => res.json())
@@ -91,22 +89,18 @@ function annaRuoat() {
   for (let i=0;i<ravintolat.length;i++) {
     switch (ravintolat[i]) {
       case "assarin-ullakko":
-        console.log("asssari check");
         ruokaViesti = fs.readFileSync("assari.json", 'utf-8');
         var viesti = JSON.parse(ruokaViesti);
-        console.log(viesti.MenusForDays[1].SetMenus);
         rakennaViesti(viesti);
         break;
       case "galilei":
         ruokaViesti = fs.readFileSync("galilei.json", 'utf-8');
         var viesti = JSON.parse(ruokaViesti);
-        console.log(viesti.MenusForDays[1].SetMenus);
         rakennaViesti(viesti);
         break;
       case "macciavelli":
         ruokaViesti = fs.readFileSync("maccis.json", 'utf-8');
         var viesti = JSON.parse(ruokaViesti);
-        console.log(viesti.MenusForDays[1].SetMenus);
         rakennaViesti(viesti);
         break;
     }
