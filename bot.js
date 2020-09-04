@@ -50,7 +50,6 @@ client.on("message", (message) => {
 try {
   console.log("Päivitä");
   paivitaRuoat();
-  annaRuoat();
 } catch (error) {
   console.error(error);
 }
@@ -89,6 +88,7 @@ function paivitaRuoat() {
     }
   }
   response = "";
+  annaRuoat();
 }
 
 function annaRuoat() {
