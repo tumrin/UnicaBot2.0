@@ -1,7 +1,6 @@
 
-const fs = require("fs");
-
 const Discord = require("discord.js");
+const fs = require("fs");
 const client = new Discord.Client();
 client.commands = new Discord.Collection();
 const prefix = "!";
@@ -47,27 +46,18 @@ client.on("message", (message) => {
 });
 
 try {
+    console.log("Päivitä");
     paivitaRuoat();
 } catch (error) {
     console.error(error);
 }
 
 function paivitaRuoat(){
-    for(i in ravintolat){
-        switch(i){
-            case "assarin-ullakko":
-                url = "https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi";
-                break;
-        default:
-            continue;
-        }
-        
+    url = "https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi";
     fetch(url, settings)
     .then(res => res.json())
     .then((json) => {
         let data = JSON.stringify(json);
-        let parsedData = {"ravintola": `${data["RestaurantName"]}`};
-        fs.writeFileSync("ruoat.json", parsedData);
+        fs.writeFileSync("assari.json", data);
     });
-    }
 }
