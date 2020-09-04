@@ -1,55 +1,56 @@
-
+/*Variable declerations*/
 const Discord = require("discord.js");
 const fs = require("fs");
 const client = new Discord.Client();
-client.commands = new Discord.Collection();
 const prefix = "!";
 const command = "ruoka";
 const fetch = require("node-fetch");
-let url = ""
 const settings = { method: "Get" };
 const ravintolat = ["assarin-ullakko", "galilei", "macciavelli"];
-token = require("./token.json");
+const token = require("./token.json");
+var url = ""
 var ruokaViesti = "";
 var response = "";
 var d = new Date();
 
-// triggered when bot:
-//  -logs in
-//  -reconnects after disconnecting
+/*Called when bot connects*/
 client.on("ready", () => {
   console.log("UnicaBot is now logged in");
   client.user.setStatus("online");
-  client.user.setActivity("!ruoka", { type: "LISTENING"});
+  client.user.setActivity("!ruoka", { type: "LISTENING" });
 });
 
+/*Login using discord app token*/
 client.login(token["token"]);
 
-
+/*Called when message is sent*/
 client.on("message", (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
-
   console.log(`${message.author.username}:${message.content}`);
-
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
-  if (!command) {
+  if (!command) { //Don't do anything if message doesnt contain correct prefix
     return;
   }
   else {
-    message.reply(response);
+    message.reply(response); //Respond on command "!ruoka"
   }
 });
 
+/*Update on startup*/
 try {
   paivitaRuoat();
 } catch (error) {
   console.error(error);
 }
 
+/**
+ * Gets the new menu from Unice website
+ * @param None
+ */
 function paivitaRuoat() {
-  for (let i=0;i<ravintolat.length;i++){
+  for (let i = 0; i < ravintolat.length; i++) {
     switch (ravintolat[i]) {
       case "assarin-ullakko":
         url = "https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi";
@@ -84,9 +85,13 @@ function paivitaRuoat() {
   annaRuoat();
 }
 
+/**
+ * Writes menus to JSON files
+ * @param None
+ */
 function annaRuoat() {
   response += `\nRuokalista ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}\n`
-  for (let i=0;i<ravintolat.length;i++) {
+  for (let i = 0; i < ravintolat.length; i++) {
     switch (ravintolat[i]) {
       case "assarin-ullakko":
         ruokaViesti = fs.readFileSync("assari.json", 'utf-8');
@@ -107,10 +112,14 @@ function annaRuoat() {
   }
 }
 
+/**
+ * Builds the response message
+ * @param {Object} viesti 
+ */
 function rakennaViesti(viesti) {
   response += `\n**${viesti.RestaurantName}**\n`
   for (j in viesti.MenusForDays[0].SetMenus) {
-    if(viesti.MenusForDays[0].SetMenus[j].Name!=null){
+    if (viesti.MenusForDays[0].SetMenus[j].Name != null) {
       response += `__${viesti.MenusForDays[0].SetMenus[j].Name}__\n`
     }
     for (k in viesti.MenusForDays[0].SetMenus[j].Components) {
@@ -119,7 +128,8 @@ function rakennaViesti(viesti) {
   }
 }
 
+/*Updates menu every 4 hours*/
 setInterval(() => {
   console.log("Trying to update");
-    paivitaRuoat();
-}, 1000 * 60 * 60 * 4); // 4 tunnin välein
+  paivitaRuoat();
+}, 1000 * 60 * 60 * 4);
