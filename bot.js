@@ -12,19 +12,15 @@ const ravintolat = ["assarin-ullakko", "galilei", "macciavelli"];
 token = require("./token.json");
 var ruokaViesti = "";
 var response = "";
+var d = new Date();
 
 // triggered when bot:
 //  -logs in
 //  -reconnects after disconnecting
 client.on("ready", () => {
   console.log("UnicaBot is now logged in");
-  client.user.setPresence({
-    status: "online",
-    game: {
-      name: "!ruoka",
-      type: "LISTENING",
-    },
-  });
+  client.user.setStatus("online");
+  client.user.setActivity("!ruoka", { type: "LISTENING"});
 });
 
 client.login(token["token"]);
@@ -35,7 +31,6 @@ client.on("message", (message) => {
 
   console.log(`${message.author.username}:${message.content}`);
 
-  // get arguments and command name from message
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
@@ -92,6 +87,7 @@ function paivitaRuoat() {
 }
 
 function annaRuoat() {
+  response += `\nRuokalista ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}\n`
   for (let i=0;i<ravintolat.length;i++) {
     switch (ravintolat[i]) {
       case "assarin-ullakko":
@@ -118,8 +114,11 @@ function annaRuoat() {
 }
 
 function rakennaViesti(viesti) {
-  response += `\n**Ravintola: ${viesti.RestaurantName}  ${viesti.MenusForDays[0].Date}**\n`
+  response += `\n**${viesti.RestaurantName}**\n`
   for (j in viesti.MenusForDays[0].SetMenus) {
+    if(viesti.MenusForDays[0].SetMenus[j].Name!=null){
+      response += `__${viesti.MenusForDays[0].SetMenus[j].Name}__\n`
+    }
     for (k in viesti.MenusForDays[0].SetMenus[j].Components) {
       response += `> ${JSON.stringify(viesti.MenusForDays[0].SetMenus[j].Components[k])}"\n`;
     }
