@@ -43,7 +43,7 @@ client.on("message", (message) => {
       return;
   }
   else{
-      message.reply(annaRuoat());
+      message.reply(response);
   }
 });
 
@@ -75,6 +75,12 @@ function annaRuoat(){
 }
 
 function rakennaViesti(viesti){
-    response=`Ravintola: ${viesti.RestaurantName}\n Ruuat:${JSON.stringify(viesti.MenusForDays[1].SetMenus)}`
+    response += `Ravintola: ${viesti.RestaurantName}\n`
+      for(j in viesti.MenusForDays[0].SetMenus){
+        for(k in viesti.MenusForDays[0].SetMenus[j].Components){
+            response += JSON.stringify(viesti.MenusForDays[0].SetMenus[j].Components[k])+"\n";
+        }
+      }
+    `Ruuat:${JSON.stringify(viesti.MenusForDays[1].SetMenus[1].Components[0])}`
     return response;
 }
