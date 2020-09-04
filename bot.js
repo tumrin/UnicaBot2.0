@@ -10,6 +10,8 @@ let url = ""
 const settings = {method: "Get"};
 const ravintolat = ["assarin-ullakko"];
 token = require("./token.json");
+var ruokaViesti = "";
+var response = "";
 
 // triggered when bot:
 //  -logs in
@@ -41,13 +43,14 @@ client.on("message", (message) => {
       return;
   }
   else{
-      message.reply(ruokaViesti);
+      message.reply(annaRuoat());
   }
 });
 
 try {
     console.log("Päivitä");
     paivitaRuoat();
+    annaRuoat();
 } catch (error) {
     console.error(error);
 }
@@ -60,4 +63,15 @@ function paivitaRuoat(){
         let data = JSON.stringify(json);
         fs.writeFileSync("assari.json", data);
     });
+    response = "";
+}
+
+function annaRuoat(){
+    ruokaViesti = fs.readFileSync("assari.json",'utf-8');
+    var viesti = JSON.parse(ruokaViesti);
+    return viesti.RestaurantName;
+}
+
+function rakennaViesti(viesti){
+    
 }
