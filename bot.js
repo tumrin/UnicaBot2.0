@@ -69,9 +69,12 @@ function paivitaRuoat(){
 function annaRuoat(){
     ruokaViesti = fs.readFileSync("assari.json",'utf-8');
     var viesti = JSON.parse(ruokaViesti);
-    return viesti.RestaurantName;
+    console.log(viesti.MenusForDays[1].SetMenus);
+    var vastaus = rakennaViesti(viesti);
+    return vastaus;
 }
 
 function rakennaViesti(viesti){
-    
+    response=`Ravintola: ${viesti.RestaurantName}\n Ruuat:${JSON.stringify(viesti.MenusForDays[1].SetMenus)}`
+    return response;
 }
