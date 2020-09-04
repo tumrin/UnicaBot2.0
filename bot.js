@@ -125,3 +125,8 @@ function rakennaViesti(viesti) {
     }
   }
 }
+
+setInterval(() => {
+  console.log("Trying to update");
+    paivitaRuoat();
+}, 1000 * 60 * 60 * 4); // 4 tunnin välein
