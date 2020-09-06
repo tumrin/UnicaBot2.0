@@ -11,7 +11,7 @@ const token = require("./token.json");
 var url = ""
 var ruokaViesti = "";
 var response = "";
-var d = new Date();
+
 
 /*Called when bot connects*/
 client.on("ready", () => {
@@ -25,12 +25,12 @@ client.login(token["token"]);
 
 /*Called when message is sent*/
 client.on("message", (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return;
+  if (!message.content.startsWith(prefix) || message.author.bot) return; //Don't do anything if message doesnt contain correct prefix
   console.log(`${message.author.username}:${message.content}`);
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
-  if (!command) { //Don't do anything if message doesnt contain correct prefix
+  if (commandName!=command) { //Don't respond if command is not right
     return;
   }
   else {
@@ -90,6 +90,7 @@ function paivitaRuoat() {
  * @param None
  */
 function annaRuoat() {
+  var d = new Date();
   response += `\nRuokalista ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}\n`
   for (let i = 0; i < ravintolat.length; i++) {
     switch (ravintolat[i]) {
