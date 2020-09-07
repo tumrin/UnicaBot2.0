@@ -52,34 +52,38 @@ try {
  */
 function paivitaRuoat() {
   for (let i = 0; i < ravintolat.length; i++) {
-    switch (ravintolat[i]) {
-      case "assarin-ullakko":
-        url = "https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi";
-        fetch(url, settings)
-          .then(res => res.json())
-          .then((json) => {
-            let data = JSON.stringify(json);
-            fs.writeFileSync("assari.json", data);
-          });
-        break;
-      case "galilei":
-        url = "https://www.unica.fi/modules/json/json/Index?costNumber=1995&language=fi";
-        fetch(url, settings)
-          .then(res => res.json())
-          .then((json) => {
-            let data = JSON.stringify(json);
-            fs.writeFileSync("galilei.json", data);
-          });
-        break;
-      case "macciavelli":
-        url = "https://www.unica.fi/modules/json/json/Index?costNumber=1970&language=fi";
-        fetch(url, settings)
-          .then(res => res.json())
-          .then((json) => {
-            let data = JSON.stringify(json);
-            fs.writeFileSync("maccis.json", data);
-          });
-        break;
+    try {
+      switch (ravintolat[i]) {
+        case "assarin-ullakko":
+          url = "https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi";
+          fetch(url, settings)
+            .then(res => res.json())
+            .then((json) => {
+              let data = JSON.stringify(json);
+              fs.writeFileSync("assari.json", data);
+            });
+          break;
+        case "galilei":
+          url = "https://www.unica.fi/modules/json/json/Index?costNumber=1995&language=fi";
+          fetch(url, settings)
+            .then(res => res.json())
+            .then((json) => {
+              let data = JSON.stringify(json);
+              fs.writeFileSync("galilei.json", data);
+            });
+          break;
+        case "macciavelli":
+          url = "https://www.unica.fi/modules/json/json/Index?costNumber=1970&language=fi";
+          fetch(url, settings)
+            .then(res => res.json())
+            .then((json) => {
+              let data = JSON.stringify(json);
+              fs.writeFileSync("maccis.json", data);
+            });
+          break;
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
   response = "";
@@ -130,9 +134,8 @@ function rakennaViesti(viesti) {
       }
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
-
 }
 
 /*Updates menu every 4 hours*/
