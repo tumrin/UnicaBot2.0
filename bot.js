@@ -119,14 +119,19 @@ function annaRuoat() {
  */
 function rakennaViesti(viesti) {
   response += `\n**${viesti.RestaurantName}**\n`
-  for (j in viesti.MenusForDays[0].SetMenus) {
-    if (viesti.MenusForDays[0].SetMenus[j].Name != null) {
-      response += `__${viesti.MenusForDays[0].SetMenus[j].Name}__\n`
+  try {
+    for (j in viesti.MenusForDays[0].SetMenus) {
+      if (viesti.MenusForDays[0].SetMenus[j].Name != null) {
+        response += `__${viesti.MenusForDays[0].SetMenus[j].Name}__\n`
+      }
+      for (k in viesti.MenusForDays[0].SetMenus[j].Components) {
+        response += `> ${JSON.stringify(viesti.MenusForDays[0].SetMenus[j].Components[k])}"\n`;
+      }
     }
-    for (k in viesti.MenusForDays[0].SetMenus[j].Components) {
-      response += `> ${JSON.stringify(viesti.MenusForDays[0].SetMenus[j].Components[k])}"\n`;
-    }
+  } catch (error) {
+    console.log(error);
   }
+
 }
 
 /*Updates menu every 4 hours*/
