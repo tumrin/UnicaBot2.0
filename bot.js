@@ -11,6 +11,7 @@ const token = require("./token.json");
 var url = ""
 var ruokaViesti = "";
 var response = "";
+const messageDate = new Date();
 
 
 /*Called when bot connects*/
@@ -26,7 +27,7 @@ client.login(token["token"]);
 /*Called when message is sent*/
 client.on("message", (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return; //Don't do anything if message doesnt contain correct prefix
-  console.log(`${message.author.username}:${message.content}`);
+  console.log(`${message.author.username}:${message.content} ${messageDate}`);
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
