@@ -35,7 +35,11 @@ client.on("message", (message) => {
     return;
   }
   else {
-    message.reply(response); //Respond on command "!ruoka"
+    try {
+      message.reply(response); //Respond on command "!ruoka"
+    } catch (error) {
+      console.error(error);
+    }
   }
 });
 
@@ -128,6 +132,9 @@ function rakennaViesti(viesti) {
     for (j in viesti.MenusForDays[0].SetMenus) {
       if (viesti.MenusForDays[0].SetMenus[j].Name != null) {
         response += `__${viesti.MenusForDays[0].SetMenus[j].Name}__\n`
+      }
+      else if(viesti.RestaurantName=="Assarin Ullakko"){
+        continue;
       }
       for (k in viesti.MenusForDays[0].SetMenus[j].Components) {
         response += `> ${JSON.stringify(viesti.MenusForDays[0].SetMenus[j].Components[k])}"\n`;
