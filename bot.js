@@ -27,8 +27,6 @@ client.login(token["token"]);
 /*Called when message is sent*/
 client.on("message", (message) => {
   if (!message.content.startsWith(prefix) || message.author.bot) return; //Don't do anything if message doesnt contain correct prefix
-  var messageDate = new Date();
-  console.log(`${message.author.username}:${message.content} ${messageDate}`);
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
@@ -41,6 +39,8 @@ client.on("message", (message) => {
     } catch (error) {
       console.error(error);
     }
+    var messageDate = new Date();
+    console.log(`${message.author.username}:${message.content} ${messageDate}`);
   }
 });
 
