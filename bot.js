@@ -150,4 +150,5 @@ function rakennaViesti(viesti) {
 setInterval(() => {
   console.log("Trying to update");
   paivitaRuoat();
+  client.user.setActivity("!ruoka", { type: "LISTENING" }); //Reset status because for some reason this resets to empty after some time
 }, 1000 * 60 * 60 * 4);
