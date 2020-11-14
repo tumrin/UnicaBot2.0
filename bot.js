@@ -142,7 +142,7 @@ function rakennaViesti(viesti) {
       }
     }
   } catch (error) {
-    console.error(error);
+    //Ignore TypeError from empty menus
   }
 }
 
