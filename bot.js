@@ -1,4 +1,5 @@
 /*Variable declerations*/
+require('dotenv').config();
 const Discord = require("discord.js");
 const fs = require("fs");
 const client = new Discord.Client();
@@ -8,9 +9,9 @@ const fetch = require("node-fetch");
 const settings = { method: "Get" };
 const ravintolat = ["assarin-ullakko", "galilei", "macciavelli"];
 const token = require("./token.json");
-var url = ""
-var ruokaViesti = "";
-var response = "";
+let url = ""
+let ruokaViesti = "";
+let response = "";
 
 
 
@@ -24,9 +25,14 @@ client.on("ready", () => {
 /*Login using discord app token*/
 client.login(token["token"]);
 
+//Consider putting your token in dotenv file as TOKEN=yoursecrettoken
+//remember to uncomment require('dotenv') on the start of the file and running "npm i" on the terminal
+//if you havent installed the package
+//client.login(process.env.TOKEN)
+
 /*Called when message is sent*/
 client.on("message", (message) => {
-  if (!message.content.startsWith(prefix) || message.author.bot) return; //Don't do anything if message doesnt contain correct prefix
+  if (!message.content.startsWith(prefix) || message.author.bot) return; //Don't do anything if message dosen't contain correct prefix
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
@@ -39,7 +45,7 @@ client.on("message", (message) => {
     } catch (error) {
       console.error(error);
     }
-    var messageDate = new Date();
+    const messageDate = new Date();
     console.log(`${message.author.username}:${message.content} ${messageDate}`);
   }
 });
@@ -52,39 +58,34 @@ try {
 }
 
 /**
+* I created a new function for fetching the food data.
+* I also did it using async await, as then chaining looks quite ugly
+* @param {String} url
+* @param {String} file
+*/
+async function haeRuokaData(url, file) {
+  const res = await fetch(url, settings)
+  const resJson = res.json()
+  const data = JSON.stringify(resJson)
+  fs.writeFileSync(file, data)
+}
+
+/**
  * Gets the new menu from Unice website
  * @param None
  */
 function paivitaRuoat() {
-  for (let i = 0; i < ravintolat.length; i++) {
+  for (r in ravintolat) {
     try {
-      switch (ravintolat[i]) {
+      switch (r) {
         case "assarin-ullakko":
-          url = "https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi";
-          fetch(url, settings)
-            .then(res => res.json())
-            .then((json) => {
-              let data = JSON.stringify(json);
-              fs.writeFileSync("assari.json", data);
-            });
+          haeRuokaData("https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi", "assari.json")
           break;
         case "galilei":
-          url = "https://www.unica.fi/modules/json/json/Index?costNumber=1995&language=fi";
-          fetch(url, settings)
-            .then(res => res.json())
-            .then((json) => {
-              let data = JSON.stringify(json);
-              fs.writeFileSync("galilei.json", data);
-            });
+          haeRuokaData("https://www.unica.fi/modules/json/json/Index?costNumber=1995&language=fi", "galilei.json")
           break;
         case "macciavelli":
-          url = "https://www.unica.fi/modules/json/json/Index?costNumber=1970&language=fi";
-          fetch(url, settings)
-            .then(res => res.json())
-            .then((json) => {
-              let data = JSON.stringify(json);
-              fs.writeFileSync("maccis.json", data);
-            });
+          haeRuokaData("https://www.unica.fi/modules/json/json/Index?costNumber=1970&language=fi", "maccis.json")
           break;
       }
     } catch (error) {
@@ -100,23 +101,24 @@ function paivitaRuoat() {
  * @param None
  */
 function annaRuoat() {
-  var d = new Date();
+  const d = new Date();
+  let viesti;
   response += `\nRuokalista ${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}\n`
   for (let i = 0; i < ravintolat.length; i++) {
     switch (ravintolat[i]) {
       case "assarin-ullakko":
         ruokaViesti = fs.readFileSync("assari.json", 'utf-8');
-        var viesti = JSON.parse(ruokaViesti);
+        viesti = JSON.parse(ruokaViesti);
         rakennaViesti(viesti);
         break;
       case "galilei":
         ruokaViesti = fs.readFileSync("galilei.json", 'utf-8');
-        var viesti = JSON.parse(ruokaViesti);
+        viesti = JSON.parse(ruokaViesti);
         rakennaViesti(viesti);
         break;
       case "macciavelli":
         ruokaViesti = fs.readFileSync("maccis.json", 'utf-8');
-        var viesti = JSON.parse(ruokaViesti);
+        viesti = JSON.parse(ruokaViesti);
         rakennaViesti(viesti);
         break;
     }
