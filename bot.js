@@ -8,11 +8,8 @@ const command = "ruoka";
 const fetch = require("node-fetch");
 const settings = { method: "Get" };
 const ravintolat = ["assarin-ullakko", "galilei", "macciavelli"];
-const token = require("./token.json");
-let url = ""
 let ruokaViesti = "";
 let response = "";
-
 
 
 /*Called when bot connects*/
@@ -23,12 +20,7 @@ client.on("ready", () => {
 });
 
 /*Login using discord app token*/
-client.login(token["token"]);
-
-//Consider putting your token in dotenv file as TOKEN=yoursecrettoken
-//remember to uncomment require('dotenv') on the start of the file and running "npm i" on the terminal
-//if you havent installed the package
-//client.login(process.env.TOKEN)
+client.login(process.env.TOKEN);
 
 /*Called when message is sent*/
 client.on("message", (message) => {
@@ -36,7 +28,7 @@ client.on("message", (message) => {
   const args = message.content.slice(prefix.length).split(/ +/);
   const commandName = args.shift().toLowerCase();
 
-  if (commandName!=command) { //Don't respond if command is not right
+  if (commandName != command) { //Don't respond if command is not right
     return;
   }
   else {
@@ -136,7 +128,7 @@ function rakennaViesti(viesti) {
       if (viesti.MenusForDays[0].SetMenus[j].Name != null) {
         response += `__${viesti.MenusForDays[0].SetMenus[j].Name}__\n`
       }
-      else if(viesti.RestaurantName=="Assarin Ullakko"){
+      else if (viesti.RestaurantName == "Assarin Ullakko") {
         continue;
       }
       for (k in viesti.MenusForDays[0].SetMenus[j].Components) {
