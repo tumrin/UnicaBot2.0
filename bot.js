@@ -56,9 +56,12 @@ try {
 * @param {String} file
 */
 async function haeRuokaData(url, file) {
-  const res = await fetch(url, settings)
-  const resJson = res.json()
-  const data = JSON.stringify(resJson)
+  const res = await fetch(url);
+  console.log(res);
+  const resJson = await res.json();
+  console.log(resJson);
+  const data = JSON.stringify(resJson);
+  console.log(data);
   fs.writeFileSync(file, data)
 }
 
@@ -69,7 +72,7 @@ async function haeRuokaData(url, file) {
 function paivitaRuoat() {
   for (r in ravintolat) {
     try {
-      switch (r) {
+      switch (ravintolat[r]) {
         case "assarin-ullakko":
           haeRuokaData("https://www.unica.fi/modules/json/json/Index?costNumber=1920&language=fi", "assari.json")
           break;
